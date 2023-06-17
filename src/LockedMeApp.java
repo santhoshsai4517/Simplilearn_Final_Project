@@ -15,7 +15,7 @@ public class LockedMeApp {
     private static void displayWelcomeScreen() {
         System.out.println("=====================================");
         System.out.println("        Welcome to LockedMe.com       ");
-        System.out.println("      Developed by [Your Name]       ");
+        System.out.println("      Developed by Santhosh      ");
         System.out.println("=====================================");
     }
 
