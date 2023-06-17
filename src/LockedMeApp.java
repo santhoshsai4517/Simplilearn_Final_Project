@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -6,6 +7,7 @@ import java.util.Scanner;
 
 public class LockedMeApp {
     private static final String DIRECTORY_PATH = "C:\\Users\\santh\\Desktop\\Simplilearn_projects\\Final_Project\\test"; // Update with the actual directory path
+    private static Scanner scanner;
 
     public static void main(String[] args) {
         displayWelcomeScreen();
@@ -96,7 +98,7 @@ public class LockedMeApp {
     }
 
     static void addFile() {
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         System.out.print("\nEnter the name of the file to add: ");
         String fileName = scanner.nextLine();
 
@@ -107,7 +109,7 @@ public class LockedMeApp {
             } else {
                 System.out.println("File already exists in the directory.");
             }
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("An error occurred while adding the file: " + e.getMessage());
         }
 
@@ -115,18 +117,29 @@ public class LockedMeApp {
     }
 
     static void deleteFile() {
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         System.out.print("\nEnter the name of the file to delete: ");
         String fileName = scanner.nextLine();
 
-        File file = new File(DIRECTORY_PATH + File.separator + fileName);
-        if (file.exists()) {
-            if (file.delete()) {
-                System.out.println("File deleted successfully.");
-            } else {
-                System.out.println("Failed to delete the file.");
+        File directory = new File(DIRECTORY_PATH);
+        File[] files = directory.listFiles();
+        boolean fileDeleted = false;
+
+        if (files != null) {
+            for (File file : files) {
+                if (file.isFile() && file.getName().equals(fileName)) {
+                    if (file.delete()) {
+                        System.out.println("File deleted successfully.");
+                        fileDeleted = true;
+                    } else {
+                        System.out.println("Failed to delete the file.");
+                    }
+                    break;
+                }
             }
-        } else {
+        }
+
+        if (!fileDeleted) {
             System.out.println("File not found.");
         }
 
@@ -134,24 +147,28 @@ public class LockedMeApp {
     }
 
     static void searchFile() {
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         System.out.print("\nEnter the name of the file to search: ");
         String fileName = scanner.nextLine();
 
         File directory = new File(DIRECTORY_PATH);
         File[] files = directory.listFiles();
+        boolean fileFound = false;
 
         if (files != null) {
             for (File file : files) {
                 if (file.isFile() && file.getName().equals(fileName)) {
                     System.out.println("File found: " + file.getAbsolutePath());
-                    showFileManagementMenu();
-                    return;
+                    fileFound = true;
+                    break;
                 }
             }
         }
 
-        System.out.println("File not found.");
+        if (!fileFound) {
+            System.out.println("File not found.");
+        }
+
         showFileManagementMenu();
     }
 
@@ -161,7 +178,7 @@ public class LockedMeApp {
     }
 
     static int getUserChoice(int minChoice, int maxChoice) {
-        Scanner scanner = new Scanner(System.in);
+        scanner = new Scanner(System.in);
         int choice;
 
         do {
@@ -171,6 +188,8 @@ public class LockedMeApp {
                 scanner.next();
             }
             choice = scanner.nextInt();
+            if(choice < minChoice || choice > maxChoice)
+            	System.out.println("Please enter the values from the range.");
         } while (choice < minChoice || choice > maxChoice);
 
         return choice;
