@@ -184,12 +184,12 @@ public class LockedMeApp {
         do {
             System.out.print("Enter your choice (" + minChoice + "-" + maxChoice + "): ");
             while (!scanner.hasNextInt()) {
-                System.out.print("Invalid input. Please enter a valid choice: ");
+                System.out.print("Invalid input. Please enter a valid choice (" + minChoice + "-" + maxChoice + "): ");
                 scanner.next();
             }
             choice = scanner.nextInt();
             if(choice < minChoice || choice > maxChoice)
-            	System.out.println("Please enter the values from the range.");
+            	System.out.println("Please enter a value in the range.");
         } while (choice < minChoice || choice > maxChoice);
 
         return choice;
